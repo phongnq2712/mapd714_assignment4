@@ -12,7 +12,7 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    private let movies = [
+    private let tasks = [
         ["Name":"Clean room","DueDate":"November 14, 2021"],
         ["Name":"Wipe floor","DueDate":"November 15, 2021"],
         ["Name":"Water plant","DueDate":"November 16, 2021"],
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         ["Name":"Spot clean cabinet fronts","DueDate":"November 19, 2021"],
         ["Name":"Clean kitchen table","DueDate":"November 20, 2021"]
     ]
-    let tableIdentifier = "moviesTable"
+    let tableIdentifier = "tasksTable"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,13 +34,13 @@ extension ViewController: UITableViewDataSource
 {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Step 1 - Instantiate an object of type UITableViewCell
-        var cell = tableView.dequeueReusableCell(withIdentifier: tableIdentifier, for: indexPath) as! CustomTableViewCell
-        var rowData = movies[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: tableIdentifier, for: indexPath) as! CustomTableViewCell
+        let rowData = tasks[indexPath.row]
         cell.name = rowData["Name"]!
         if(indexPath.row < 2)
         {
@@ -52,8 +52,8 @@ extension ViewController: UITableViewDataSource
         //cell.imageView?.image = editImage
 
         // Add Edit button target (add target only once when the cell is created)
-        cell.useButton.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
-        cell.useButton.tag = indexPath.row
+        cell.editButton.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
+        cell.editButton.tag = indexPath.row
         
         // switch view
         let switchView = UISwitch(frame: .zero)
@@ -70,7 +70,7 @@ extension ViewController: UITableViewDataSource
      */
     @objc func pressButton(_ sender: UIButton) {
          //Somehow get the IndexPath of the row whose button called this function
-        print("Movie is \(movies[sender.tag])")
+        // print("Task is \(tasks[sender.tag])")
         if let vc = storyboard?.instantiateViewController(identifier: "DetailViewController") as? DetailViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -82,17 +82,17 @@ extension ViewController: UITableViewDataSource
     @objc func switchChanged(_ sender: UISwitch)
     {
         // get indexPath for current cell
-        let indexPath = self.tableView.indexPathForSelectedRow
-        
-        let cell = self.tableView.cellForRow(at: indexPath!) as! CustomTableViewCell
-
-        var rowData = movies[sender.tag]
-        if(sender.isOn)
+        if let indexPath = self.tableView.indexPathForSelectedRow
         {
-            cell.dueDate = rowData["DueDate"]!
-        } else {
-            cell.dueDate = ""
+            let cell = self.tableView.cellForRow(at: indexPath) as! CustomTableViewCell
+            let rowData = tasks[sender.tag]
+            if(sender.isOn)
+            {
+                cell.dueDate = rowData["DueDate"]!
+            } else {
+                cell.dueDate = ""
+            }
+            self.tableView.cellForRow(at: indexPath)
         }
-        self.tableView.cellForRow(at: indexPath!)
     }
 }

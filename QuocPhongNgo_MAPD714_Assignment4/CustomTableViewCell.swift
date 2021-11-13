@@ -11,7 +11,7 @@ import UIKit
 
 class CustomTableViewCell: UITableViewCell {
 
-    weak var useButton: UIButton!
+    weak var editButton: UIButton!
     
     var name:String = "" {
         didSet {
@@ -57,17 +57,17 @@ class CustomTableViewCell: UITableViewCell {
         dueDateLabel = UILabel(frame: genreValueRect)
         contentView.addSubview(dueDateLabel)
         
-        //Initialize Use button
-        let useButton = UIButton(frame: CGRect(x: 8, y: 4.5, width: 48, height: 28))
-        self.useButton = useButton
-        //super.init(style: .default, reuseIdentifier: "moviesTable")
+        //Initialize Edit button
+        let editButton = UIButton(frame: CGRect(x: 8, y: 4.5, width: 48, height: 28))
+        self.editButton = editButton
         self.frame = frame
         
-        //Setup Use button
-        addSubview(useButton)
-        useButton.setTitle("Edit", for: .normal)
-        useButton.setTitleColor(.blue, for: .normal)
-        useButton.center.y = self.center.y
+        //Setup Edit button
+        addSubview(editButton)
+        let editImage = UIImage(systemName: "square.and.pencil")
+        editButton.setImage(editImage, for: UIControl.State.normal)
+        editButton.setTitleColor(.blue, for: .normal)
+        editButton.center.y = self.center.y
     }
     
     required init?(coder: NSCoder) {
